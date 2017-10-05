@@ -52,27 +52,33 @@ class LoadFiscalYearsCommand extends ContainerAwareCommand
     {
         $this->input = $input;
         $this->output = $output;
-
+        $dataDir = $this->getContainer()->getParameter('kernel.root_dir').'/../var/data';
+        if (!file_exists($dataDir)) {
+            mkdir($dataDir);
+        }
+        if (!is_writeable($dataDir)) {
+            throw new \Exception('Folder is not writable: '.$dataDir);
+        }
         foreach (range(2016, 2017) as $year) {
             $url = sprintf("https://www.accessdata.fda.gov/scripts/oce/inspections/generatedExcelReports/OCE_FY%s.csv", $year);
-            $filename = 'var/' . basename($url);
+            $filename = $dataDir.'/'.basename($url);
             if (!file_exists($filename)) {
                 $output->writeln("Downloading $url", true);
                 $csv = file_get_contents($url);
                 file_put_contents($filename, $csv);
             }
         }
-        $this->loadFiscalYears($input->getOption('reset'), $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE);
+        $this->loadFiscalYears($dataDir, $input->getOption('reset'), $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE);
     }
 
-    public function loadFiscalYears($reset = false, $verbose = 0)
+    public function loadFiscalYears($dataDir, $reset = false, $verbose = 0)
     {
         $em = $this->getContainer()
             ->get('doctrine.orm.entity_manager');
         $repo = $em->getRepository(FiscalYear::class);
 
         $finder = new Finder();
-        $finder->files()->in('var/data');
+        $finder->files()->in($dataDir);
 
         foreach ($finder as $file) {
             if (preg_match('/FY(\d{4})/', $file->getRealPath(), $m)) {
