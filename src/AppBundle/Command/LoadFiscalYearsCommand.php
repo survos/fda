@@ -53,8 +53,16 @@ class LoadFiscalYearsCommand extends ContainerAwareCommand
         $this->input = $input;
         $this->output = $output;
 
-
-            $this->loadFiscalYears($input->getOption('reset'), $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE);
+        foreach (range(2016, 2017) as $year) {
+            $url = sprintf("https://www.accessdata.fda.gov/scripts/oce/inspections/generatedExcelReports/OCE_FY%s.csv", $year);
+            $filename = 'var/' . basename($url);
+            if (!file_exists($filename)) {
+                $output->writeln("Downloading $url", true);
+                $csv = file_get_contents($url);
+                file_put_contents($filename, $csv);
+            }
+        }
+        $this->loadFiscalYears($input->getOption('reset'), $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE);
     }
 
     public function loadFiscalYears($reset = false, $verbose = 0)
@@ -126,7 +134,6 @@ class LoadFiscalYearsCommand extends ContainerAwareCommand
                         $entity->$method($val);
                     }
                     $violationCount++;
-                    dump($entity);
                     if ($violationCount >= $this->input->getOption('limit')) {
                         break;
                     }

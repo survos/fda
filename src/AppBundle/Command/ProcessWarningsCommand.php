@@ -3,6 +3,7 @@ namespace AppBundle\Command;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -31,6 +32,8 @@ class ProcessWarningsCommand extends ContainerAwareCommand
     /** @var FilesystemAdapter */
     private $cache;
 
+    /** @var  EntityManager */
+    private $em;
     /**
      *
      */
@@ -60,8 +63,11 @@ class ProcessWarningsCommand extends ContainerAwareCommand
     {
         $this->input = $input;
         $this->output = $output;
+        $limit = $input->getOption('limit');
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
+
+        $em = $this->em;
 
         $id = $input->getOption('id');
         $verbose = $input->getOption('verbose');
@@ -221,7 +227,7 @@ class ProcessWarningsCommand extends ContainerAwareCommand
                 // var_dump($warning->getWarningJson());
             }
 
-            $this->getManager()->persist($warning);
+            $em->persist($warning);
 
             $violations = $warning->getViolationsList();
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
@@ -235,7 +241,7 @@ class ProcessWarningsCommand extends ContainerAwareCommand
             // tt::dump($warning, 1);
         }
 
-        $this->getManager()->flush();
+            $em->flush();
     }
 
     /**
@@ -264,16 +270,9 @@ class ProcessWarningsCommand extends ContainerAwareCommand
         return $statuteList;
     }
 
-    private
-    function updateCounts()
+    private function getManager()
     {
-        $em = $this->getManager();
-        $em->createQueryBuilder();
-        // $query = $em->createQuery('SELECT u, count(g.id) FROM Entities\User u JOIN u.groups g GROUP BY u.id');
-
-        $db = $this->createQueryBuilder('s');
-        $db->andWhere('COUNT( * ) AS count');
-        $db->groupBy('s.');
+        return $this->em;
     }
 
     /**

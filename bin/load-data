@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+bin/console doctrine:schema:update --force
+bin/console fda:load-fiscal-years
+bin/console fda:scrape
+bin/console fda:process
+
+echo got to /admin to see data

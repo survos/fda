@@ -1,6 +1,12 @@
 Master Retailer Database, Mobile App
 ====================================
 
+    composer install
+    bin/load-data
+    bin/console server:start
+    
+
+
 1) Setting up / updating local environment 
 ----------------------------------
 
