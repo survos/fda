@@ -1,0 +1,10 @@
+easy_admin:
+   entities:
+      RawInspection:
+            class: AppBundle\Entity\RawInspection
+            list:
+                fields: ['Hash', 'HtmlLength', 'IsWarningSent', 'RetailerName', 'StreetAddress', 'City', 'State', 'Zip', 'DecisionType', 'MinorInvolved', 'SaletoMinor', 'DecisionDate', 'Link']
+      FiscalYear:
+            class: AppBundle\Entity\FiscalYear
+      Statute:
+            class: AppBundle\Entity\Statute

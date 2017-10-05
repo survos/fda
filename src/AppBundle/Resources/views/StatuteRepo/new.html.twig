@@ -1,0 +1,16 @@
+
+
+{# /Resources/views/Statute/browse.html.twig #}
+
+{% extends 'AppBundle:Statute_layout.html.twig' %}
+
+{% block meta_title 'AppBundle:Statute NEW ' %}
+
+
+{% block template_content %}
+    <form class="form-horizontal" method="post">
+
+        {{ form_rest(form) }}
+        <div class="clearfix"><button type="submit" class="btn btn-primary">Create NEW</button></div>
+    </form>
+{% endblock %}

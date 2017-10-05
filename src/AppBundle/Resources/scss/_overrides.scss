@@ -1,0 +1,20 @@
+/**
+ * bootstrap overrides
+ */
+
+/**
+ * dropdown on hover
+ * @type {[type]}
+ */
+/*ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: block;
+}*/
+
+
+
+.progress {
+  background: #aaa;
+  span {
+    white-space: nowrap;
+  }
+}

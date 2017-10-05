@@ -1,0 +1,42 @@
+
+    
+    {% extends "::layout.html.twig" %}
+    {% import "PosseSurveyBundle:File:form_macros.html.twig" as forms %}
+    
+
+    {% block meta_title %}
+    Devices
+
+{% endblock meta_title %}
+
+    {% block content %}
+    <div class="clearfix" xmlns="http://www.w3.org/1999/html">
+
+        <table id="devices-table"
+               data-url="{{ path('fda_rawinspection_browse', {_format: 'json'}) }}"
+               class="table-datatable table-striped table-condensed">
+            
+            <thead>
+            <tr>
+                {% for column in table.columns %}
+                    <th>{{ column.label | trans }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in table.data if false %}
+                <tr>
+                    {% for td in data %}
+                        <td>{{ td|raw }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+            
+        </table>
+
+    </div>
+
+{% endblock content %}
+
+

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+{% from 'MopaBootstrapBundle::flash.html.twig' import session_flash %}
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block meta_title %}FDA Inspections{% endblock %} </title>
+    <meta name="description" content="">
+
+    {% block stylesheets %}
+        {% include '_stylesheets.html.twig' %}
+    {% endblock %}
+
+    {% block javascripts_head %}
+        {% include "::_javascripts_top.html.twig" %}
+    {% endblock %}
+
+</head>
+
+<body class="">
+{% block body %}
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">FDA Inspections
+            <small>({{ appVersion|default('1.0') }})</small>
+        </a>
+    </div>
+    <!-- /.navbar-header -->
+
+    {# let's skip login for this version
+    <ul class="nav navbar-top-links navbar-right">
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="{{ path('fos_user_profile_show') }}"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                </li>
+                <li><a href="{{ path('fos_user_change_password') }}"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                </li>
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
+        <!-- /.dropdown -->
+    </ul>
+    #}
+    <!-- /.navbar-top-links -->
+    {% if is_granted('ROLE_USER') %}
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                {% for menuTitle, menu in {
+                'App': 'AppBundle:MenuBuilder:mainMenu',
+                } %}
+                    {{ knp_menu_render(menu, {"ancestorClass": 'in', "currentClass": 'active'}) }}
+                {% endfor %}
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+    {% endif %}
+    <!-- /.navbar-static-side -->
+</nav>
+
+
+<!-- Right side column. Contains the navbar and content of the page -->
+
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {% block layout_title %}POSSE Retailers{% endblock %}
+            </h1>
+            {% block flashes %}
+                {% if app.session.flashbag.peekAll|length > 0 %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{ session_flash() }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endblock flashes %}
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        {% block content %}{% endblock %}
+    </section>
+    <!-- /.content -->
+    {% include '::footer.html.twig' %}
+</div>
+
+
+{% endblock body %}
+
+
+{% block javascripts %}
+    {% include "::_javascripts.html.twig" %}
+{% endblock %}
+<div class="modal fade" id="main-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,16 @@
+
+
+{# /Resources/views/DecisionType/browse.html.twig #}
+
+{% extends 'AppBundle:DecisionType_layout.html.twig' %}
+
+{% block meta_title 'AppBundle:DecisionType NEW ' %}
+
+
+{% block template_content %}
+    <form class="form-horizontal" method="post">
+
+        {{ form_rest(form) }}
+        <div class="clearfix"><button type="submit" class="btn btn-primary">Create NEW</button></div>
+    </form>
+{% endblock %}

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE database SYSTEM "../dtd/database.dtd">
+
+<database name="fda"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.7/database.xsd"
+          namespace="Tobacco\FDABundle\Model" defaultIdMethod="native">
+
+    <table name="raw_inspection" phpName="RawInspection">
+        <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="line_number" phpName="LineNumber" type="INTEGER" required="true" label="Line" sortable="true"/>
+
+        <column name="raw_retailer_name" phpName="RawRetailerName" type="VARCHAR" size="90" required="true"/>
+        <column name="raw_street_address" phpName="RawStreetAddress" type="VARCHAR" size="128" required="false"/>
+        <column name="raw_city" phpName="RawCity" type="VARCHAR" size="64" required="true"/>
+        <column name="raw_state" phpName="RawState" type="VARCHAR" size="2" required="true"/>
+        <column name="raw_zip" phpName="RawZip" type="VARCHAR" size="10" required="true"/>
+        <column name="raw_full_address" phpName="RawFullAddress" type="LONGVARCHAR" required="false"/>
+
+        <column name="retailer_name" phpName="RetailerName" primaryString="true" type="VARCHAR" size="90"
+                required="true"/>
+        <column name="street_address" phpName="StreetAddress" type="VARCHAR" size="128" required="false"/>
+        <column name="city" phpName="City" type="VARCHAR" size="64" required="true"/>
+        <column name="state" phpName="State" type="VARCHAR" size="2" required="true"/>
+        <column name="zip" phpName="Zip" type="VARCHAR" size="10" required="true"/>
+        <column name="full_address" phpName="FullAddress" type="LONGVARCHAR" required="false"/>
+
+        <column name="fiscal_year" type="INTEGER" required="true"/>
+
+        <column name="key" phpName="Key" type="VARCHAR" size="240" required="false"/>
+        <column name="decision_type" phpName="DecisionType" type="VARCHAR" size="64" label="Decision Type"/>
+        <column name="decision_date" phpName="DecisionDate" type="DATE"/>
+        <column name="inspection_date" phpName="InspectionDate" type="DATE" required="false" sortable="true"/>
+        <column name="inspection_year" phpName="InspectionYear" type="INTEGER" required="false"/>
+        <column name="google_data_json" type="LONGVARCHAR" sqlType="JSON" label="Google Geo"/>
+        <column name="match" phpName="Match" type="VARCHAR" size="16" label="Google Geo Match"/>
+        <column name="reference_number" phpName="ReferenceNumber" type="VARCHAR" size="32" required="false"/>
+        <column name="longitude" type="DECIMAL"/>
+        <column name="latitude" type="DECIMAL"/>
+        <column name="the_geom" type="LONGVARCHAR" sqlType="GEOMETRY"/>
+
+        <column name="is_warning_sent" phpName="IsWarningSent" type="BOOLEAN" default="false"/>
+        <column name="is_minor_involved" type="BOOLEAN" default="false"/>
+        <column name="sale_to_minor" type="BOOLEAN" default="false"/>
+        <column name="ucm_number" phpName="UcmNumber" type="INTEGER" label="UCM" required="false"/>
+        <column name="warning_url" phpName="WarningUrl" type="VARCHAR" size="255" label="URL"/>
+        <column name="warning_html" phpName="WarningHtml" type="LONGVARCHAR" label="HTML"/>
+        <column name="warning_date" phpName="WarningDate" type="DATE" sortable="true"/>
+        <column name="warning_json" phpName="WarningJson" type="LONGVARCHAR" sqlType="JSON" label="JSON"/>
+        <column name="violation_count" phpName="ViolationCount" type="INTEGER" required="false" sortable="true"/>
+        <column name="violations_list" phpName="ViolationsList" type="LONGVARCHAR" required="false"/>
+        <column name="v14e_type" phpName="V14eType" type="VARCHAR" size="128" required="false"/>
+        <column name="civil_fine" phpName="CivilFine" type="INTEGER" required="false" sortable="true"/>
+        <column name="recent_violations" type="LONGVARCHAR" required="false"/><!-- should this be json? -->
+
+        <column name="has_10" phpName="Has10" type="BOOLEAN" default="false"/>
+        <column name="has_14d" phpName="Has14d" type="BOOLEAN" default="false"/>
+        <column name="has_16" phpName="Has16" type="BOOLEAN" default="false"/>
+        <column name="has_16b" phpName="Has16b" type="BOOLEAN" default="false"/>
+        <column name="has_16d1" phpName="Has16d1" type="BOOLEAN" default="false"/>
+        <column name="has_2" phpName="Has2" type="BOOLEAN" default="false"/>
+        <column name="has_16d2" phpName="Has16d2" type="BOOLEAN" default="false"/>
+        <column name="has_14b" phpName="Has14b" type="BOOLEAN" default="false"/>
+        <column name="has_16c" phpName="Has16c" type="BOOLEAN" default="false"/>
+        <column name="has_14a" phpName="Has14a" type="BOOLEAN" default="false"/>
+        <column name="has_14b1" phpName="Has14b1" type="BOOLEAN" default="false"/>
+        <column name="has_14b2" phpName="Has14b2" type="BOOLEAN" default="false"/>
+        <column name="has_14e" phpName="Has14e" type="BOOLEAN" default="false"/>
+        <column name="has_16c1" phpName="Has16c1" type="BOOLEAN" default="false"/>
+        <column name="has_14c" phpName="Has14c" type="BOOLEAN" default="false"/>
+        <column name="has_34b" phpName="Has34b" type="BOOLEAN" default="false"/>
+        <column name="violation_history" type="LONGVARCHAR"/>
+        <index>
+            <index-column name="state"/>
+        </index>
+        <unique>
+            <unique-column name="fiscal_year"></unique-column>
+            <unique-column name="line_number"></unique-column>
+        </unique>
+        <index>
+            <index-column name="reference_number"/>
+        </index>
+        <index>
+            <index-column name="violation_count"/>
+        </index>
+        <index>
+            <index-column name="key"/>
+        </index>
+        <index>
+            <index-column name="inspection_date"/>
+        </index>
+        <index>
+            <index-column name="warning_date"/>
+        </index>
+    </table>
+
+
+    <table name="decision_type" phpName="DecisionType" idMethod="native">
+        <column name="id" phpName="Id" type="INTEGER"
+                primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name" phpName="Name"
+                primaryString="true"
+                type="VARCHAR" size="200" required="true"/>
+        <column name="inspection_count" type="INTEGER"/>
+        <!--
+        <behavior name="aggregate_column">
+           <parameter name="name" value="inspection_count" />
+           <parameter name="foreign_table" value="fda.inspection" />
+           <parameter name="expression" value="COUNT(decision_type_id)" />
+        </behavior>
+        -->
+    </table>
+
+    <table name="retailer" phpName="Retailer" idMethod="native">
+        <column name="id" phpName="Id" type="INTEGER"
+                primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="retailer_name" phpName="RetailerName" type="VARCHAR" size="90"
+                primaryString="true"
+                required="true"/>
+        <column name="street_address" phpName="StreetAddress" type="VARCHAR" size="128" required="false"/>
+        <column name="street_number" phpName="StreetNumber" type="VARCHAR" size="10" required="false"/>
+        <column name="street_name" phpName="StreetName" type="VARCHAR" size="128" required="true"/>
+        <column name="city" phpName="City" type="VARCHAR" size="32" required="true"/>
+        <column name="state" phpName="State" type="VARCHAR" size="2" required="true"/>
+        <column name="zip" phpName="Zip" type="VARCHAR" size="10" required="true"/>
+        <column name="neighborhood" phpName="Neighborhood" type="VARCHAR" size="64"/>
+        <column name="retail_type" phpName="Type" type="VARCHAR" size="32" required="false"/>
+        <!-- list, separated by pipe probably, for easy export -->
+        <column name="violations_list" phpName="ViolationsList" type="VARCHAR" size="128" required="false"/>
+        <column name="violation_count" phpName="ViolationCount" type="INTEGER" required="false" sortable="true"/>
+
+        <column name="latitude" phpName="Latitude" type="DOUBLE"/>
+        <column name="longitude" phpName="Longitude" type="DOUBLE"/>
+        <index>
+            <index-column name="state"/>
+        </index>
+        <index>
+            <index-column name="violation_count"/>
+        </index>
+        <unique name="name_address">
+            <unique-column name="zip"/>
+            <unique-column name="street_name"/>
+            <unique-column name="street_number"/>
+            <unique-column name="retailer_name"/>
+        </unique>
+
+        <!--
+        <behavior name="sluggable">
+          <parameter name="slug_pattern" value="{RetailerName}-{Zip}" />
+        </behavior>
+        -->
+    </table>
+
+    <table name="state" phpName="State" idMethod="none">
+        <column name="id" phpName="Id" type="CHAR" size="2"
+                primaryKey="true" autoIncrement="false" required="true"/>
+        <column name="name" phpName="Name" type="VARCHAR" size="128" required="true"/>
+        <column name="inspection_count" phpName="InspectionCount" type="INTEGER" sortable="true"/>
+        <column name="contract_total" phpName="ContractTotal" type="INTEGER" sortable="true"/>
+        <column name="department" phpName="Department" type="VARCHAR" size="255"/>
+        <column name="state_award_1" phpName="StateAward1" type="DATE"/>
+        <column name="state_award_2" phpName="StateAward2" type="DATE"/>
+    </table>
+
+    <table name="statute" phpName="Statute" idMethod="native">
+        <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="cfr_regulation" phpName="Regulation" type="VARCHAR" size="32" sortable="true"/>
+        <column name="short_title" phpName="Title" type="VARCHAR" size="64" primaryString="true" label="Title"/>
+        <column name="description" phpName="Description" type="LONGVARCHAR"/>
+        <column name="title_number" phpName="TitleNumber" type="INTEGER" label="Title"/>
+        <column name="codebook" phpName="Codebook" type="VARCHAR" size="16"/>
+        <column name="part" phpName="Part" type="VARCHAR" size="16"/>
+        <column name="section" phpName="Section" type="VARCHAR" size="16"/>
+        <column name="paragraph" phpName="Paragraph" type="VARCHAR" size="32"/>
+        <column name="statute_code" phpName="Code" type="VARCHAR" size="30" required="true" label="Code"/>
+        <column name="variable" phpName="Variable" type="VARCHAR" size="30" required="true" label="Code"/>
+        <column name="url" phpName="Url" type="LONGVARCHAR" label="URL"/>
+        <column name="warning_count" phpName="WarningCount" sortable="true" type="integer" label="Warnings"/>
+
+        <behavior name="aggregate_column">
+            <parameter name="name" value="warning_count"/>
+            <parameter name="foreign_table" value="warning_statute"/>
+            <parameter name="expression" value="COUNT(warning_statute.statute_id)"/>
+        </behavior>
+
+        <unique>
+            <unique-column name="cfr_regulation"/>
+        </unique>
+
+    </table>
+
+    <table name="warning_statute" phpName="WarningStatute" idMethod="native" isCrossRef="true">
+        <column name="inspection_id" phpName="InspectionId" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="statute_id" phpName="StatuteId" type="INTEGER" required="true" primaryKey="true"/>
+        <foreign-key foreignTable="raw_inspection" onDelete="CASCADE">
+            <reference local="inspection_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="statute" onDelete="CASCADE">
+            <reference local="statute_id" foreign="id"/>
+        </foreign-key>
+        <unique name="unique_warning_statute">
+            <unique-column name="inspection_id"/>
+            <unique-column name="statute_id"/>
+        </unique>
+    </table>
+
+</database>

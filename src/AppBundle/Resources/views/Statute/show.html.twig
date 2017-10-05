@@ -1,0 +1,76 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Statute</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Cfrregulation</th>
+                <td>{{ entity.cfrRegulation }}</td>
+            </tr>
+            <tr>
+                <th>Shorttitle</th>
+                <td>{{ entity.shortTitle }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ entity.description }}</td>
+            </tr>
+            <tr>
+                <th>Titlenumber</th>
+                <td>{{ entity.titleNumber }}</td>
+            </tr>
+            <tr>
+                <th>Codebook</th>
+                <td>{{ entity.codebook }}</td>
+            </tr>
+            <tr>
+                <th>Part</th>
+                <td>{{ entity.part }}</td>
+            </tr>
+            <tr>
+                <th>Section</th>
+                <td>{{ entity.section }}</td>
+            </tr>
+            <tr>
+                <th>Paragraph</th>
+                <td>{{ entity.paragraph }}</td>
+            </tr>
+            <tr>
+                <th>Statutecode</th>
+                <td>{{ entity.statuteCode }}</td>
+            </tr>
+            <tr>
+                <th>Variable</th>
+                <td>{{ entity.variable }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ entity.url }}</td>
+            </tr>
+            <tr>
+                <th>Warningcount</th>
+                <td>{{ entity.warningCount }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('statute') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('statute_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

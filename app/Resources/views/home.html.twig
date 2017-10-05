@@ -1,0 +1,157 @@
+{% extends '::layout.html.twig' %}
+
+{% block intro %}
+    FDA Inspections Home Page
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Inspections by year
+        </div>
+        <div class="panel-body">
+
+
+            {#<tr>#}
+            {#<th>Fiscal year</th>#}
+            {#<th>Lines</th>#}
+            {#<th>Read</th>#}
+            {#<th>Civil Money Penalty</th>#}
+            {#<th>Warning Letters</th>#}
+            {#</tr>#}
+            <div class="row">
+                {% for i in inspections %}
+                    {% set year_popover %}
+                    <table class="small table table-condensed">
+                        {% for k,v in i.stats %}
+                        <tr>
+                            <td class="nowrap">{{ k|replace({
+                                    'cmp': 'Civil Money Penalty',
+                                    'cmp_nya': 'Civil Money Penalty (not yet available)',
+                                    'wl': 'Warning Letter',
+                                    'wl_nya': 'Warning Letter (not yet available)',
+                                }) }}</td>
+                            <td>{{ v }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    {% endset %}
+                    <div class="col-sm-2 text-center padding-xs">
+                        <div class="well well-xs">
+                        <h3>{{ i.year }} <small><a  data-container="body" data-title="Raw file data" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='{{ year_popover|raw }}'>
+                                <i class="fa fa-info"></i>
+                            </a></small></h3>
+
+                        {% set progress = 0 %}
+                        {% if i.lineCount>0 %}{% set progress = i.readCount/i.lineCount*100 %}{% endif %}
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped{% if progress<100 %} active{% endif %}"
+                                 role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: {{ progress }}%">
+                                <span>{{ progress|round }}% read of {{ i.lineCount }}</span>
+                            </div>
+                            {% set nowarnings=i.readCount - i.civilMoneyCount|default(0) - i.warningLetterCount|default(0) %}
+                        </div>
+                        <strong>{{ i.civilMoneyCount|default(0) }}</strong> <br><small>Civil money penalties</small><br>
+                        <strong>{{ i.warningLetterCount|default(0) }}</strong> <br><small>Warning letters</small>
+                        <strong>{{ i.inspectionCount|default(0) }}</strong> <br><small>Total inspections</small>
+                        {#<div class="donut" data-civil="{{ i.civilMoneyCount|default(0) }}"#}
+                             {#data-warnings="{{ i.warningLetterCount|default(0) }}"#}
+                             {#data-nowarnings="{{ nowarnings }}"#}
+                              {#data-progress="{{ progress }}"  ></div>#}
+
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>About this Project</h1>
+
+            <p>
+                The FDA Inspection Map is part of a larger monitoring project by the
+                American Legacy Foundation to investigate Tobacco Point of Sale (POSSE).
+                <a href="http://gis.americanlegacy.org/LegacyTobaccoViewer/" class="btn btn-primary" target="_blank">Open
+                    Legacy
+                    Tobacco Outlet Viewer</a>
+            </p>
+
+            <h2>Quick Technical Summary</h2>
+
+            <p>
+                The inspection database and letters were downloaded from the website,
+                and mentioned statutes were extracted. From there, we used a variety
+                of tools to map the statutes and retailers.
+            </p>
+
+            <h2>Detailed Summary/Method</h2>
+
+            <p>
+                The FDA makes its inspection data available here:
+            <ul>
+                <li><a target="_blank"
+                       href='http://www.fda.gov/ICECI/EnforcementActions/WarningLetters/Tobacco/default.htm'>http://www.fda.gov/ICECI/EnforcementActions/WarningLetters/Tobacco/default.htm</a>
+                <li><a target="_blank"
+                       href='http://www.accessdata.fda.gov/scripts/oce/inspections/oce_insp_searching.cfm'>http://www.accessdata.fda.gov/scripts/oce/inspections/oce_insp_searching.cfm</a>
+
+            </ul>
+            <p>
+                The data was downloaded in CSV (Commma-Separated Values), cleaned (there
+                are some formatting issues in the data), and imported into a relational database.
+            </p>
+
+            <p>
+                The cleaned data was then exported in run through geocoding software to get
+                the latitude and longitude. Although this wasn't critical at this step,
+                it was important for later integration with our Streetview project.
+            </p>
+
+            <p>
+                Next, a "screen scraping" program was used to download the violation letters,
+                basicially accomplishing the same thing as visiting each url for the violation letter,
+                and saving the HTML (the letter with its formatting). Finally, another program
+                was run that looked for certain patterns -- mostly the sections that were mentioned.
+                The results were stored in a separate table, linked to the letter, which in
+                turn was linked to the inspection and the store.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        (function () {
+            // handle home page donuts
+            var handleDonuts = function (donut) {
+                var $donut = $(donut);
+                console.log('init donut', $donut.data('civil'));
+                Morris.Donut({
+                    element: $donut,
+                    data: [
+                        {label: "Civil money penalty", value: $donut.data('civil')},
+                        {label: "Warning letter", value: $donut.data('warnings')},
+                        {label: "No warnings\n("+$donut.data('progress')+"% read)", value: $donut.data('nowarnings')}
+                    ]
+                });
+
+            }
+            $('.donut').each(function (a, b) {
+                handleDonuts(b);
+            });
+
+            $('[data-toggle="popover"]').popover({html:true});
+        })()
+    </script>
+    <style>
+        .donut{
+        }
+        .padding-xs {
+            padding: 0 8px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,17 @@
+@import "variables";
+@import "overrides";
+
+/* Extra .table is to override more specific bootstrap.css */
+.right, .table .right {
+  text-align: right;
+}
+
+.center, .table .center {
+  text-align: center;
+}
+
+/* to fix horizontal scrolling in datatables */
+.dataTables_scroll {
+  overflow: auto;
+  width: 100%;
+}

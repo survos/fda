@@ -1,0 +1,14 @@
+{% extends '::layout.html.twig' %}
+
+{% block intro %}
+    FDA Inspections Statues
+{% endblock %}
+
+{% block content %}
+
+    <h3>Statues</h3>
+
+    {% for statute in q.result %}
+        {{ dump(statute) }}
+        {% endfor %}
+{% endblock %}

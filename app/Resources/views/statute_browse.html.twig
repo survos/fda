@@ -1,0 +1,46 @@
+{% extends '::layout.html.twig' %}
+
+{% block layout_title %}Statutes{% endblock %}
+
+{% block content %}
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Code</th>
+            <th>Regulation</th>
+            <th>Frequency</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for result in statutes %}
+            {% set r = result.inspection %}
+            <tr>
+                <td>{% if r.Codebook == 'C.F.R.' %}<a target="_blank"
+                                                      href='{{ r.cfrUrl }}'>{{ r.statuteCode }}</a>{% else %}{{ r.statuteCode }}{% endif %}
+                </td>
+                <td>
+                    <a href='{{ path("statute_show", {id: r.id}) }}'>{{ r.cfrRegulation }}:
+                        {{ r.shortTitle }}
+                    </a>
+                </td>
+                <td>
+                    {#
+                        {{ r.WarningsOnlyCount|number_format }}
+                    #}
+                    {{ result.cnt|number_format }}</a>
+                </td>
+                <td>
+
+                    <a href='{{ path("fda_export_warning", {_format:'csv',statute: r.id}) }}'><i
+                                class="fa fa-save"> Export {{ r.varCode }}</i> </a>
+
+                </td>
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}

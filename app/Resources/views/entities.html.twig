@@ -1,0 +1,10 @@
+{% extends '::layout.html.twig' %}
+{% block layout_title %} {{ title|default('Entity Dump') }}{% endblock %}
+
+
+{% block content %}
+
+    {% for e in q.result %}
+        {{ dump(e) }}
+        {% endfor %}
+{% endblock %}

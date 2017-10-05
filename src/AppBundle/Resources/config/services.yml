@@ -1,0 +1,14 @@
+parameters:
+#    app.example.class: AppBundle\Example
+
+services:
+  survos.excel:
+    class: Survos\Lib\ExcelWriter
+
+  app.export:
+    class: AppBundle\Services\ExportService
+    arguments:
+      doctrine: @doctrine
+      rootDir: %kernel.root_dir%/Resources/exports/
+      excel: @survos.excel
+      cartoDb: @survos.cartodb

@@ -1,0 +1,25 @@
+{% extends '::layout.html.twig' %}
+
+
+{% block intro %}
+<h3>Display Customized RawInspection Record </h3>
+{% endblock %}
+
+
+{% block after_table %}
+{% endblock after_table %}
+
+{% block meta_title %}
+RawInspection
+{% endblock %}
+
+
+{% block content %}
+<pre>
+{{ yaml(d)}}
+</pre>
+    {% endblock %}
+
+
+
+

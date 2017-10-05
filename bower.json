@@ -1,0 +1,47 @@
+{
+  "name": "FDA Inspections",
+  "version": "1.0.0",
+  "homepage": "https://github.com/Survos/FDA-Inspections",
+  "authors": [
+    "Peter Grochowski <piogrek@gmail.com>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "~2.8.3",
+    "jquery-ui": "~1.11.2",
+    "backbone": "~1.1.2",
+    "underscore": "~1.7.0",
+    "pickadate": "~3.5.4",
+    "datatables": "~1.10.4",
+    "startbootstrap-sb-admin-2": "~1.0.4",
+    "select2-bootstrap3-css": "~1.4.4",
+    "morrisjs": "~0.5.1"
+  },
+  "exportsOverride": {
+    "bootstrap": {
+      "js": "dist/js/*",
+      "css": "dist/css/*"
+    },
+    "jquery": {
+      "": "dist/*"
+    },
+    "jquery-ui": {
+      "": "*.js"
+    },
+    "font-awesome": {
+      "css": "css",
+      "fonts": "fonts"
+    }
+  }
+}

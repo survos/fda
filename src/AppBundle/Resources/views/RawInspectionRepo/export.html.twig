@@ -1,0 +1,82 @@
+{# /Resources/views/RawInspection/browse.html.twig #}
+
+{% extends '::layout.html.twig' %}
+
+{% block meta_title 'Export inspections' %}
+
+
+    {% block content %}
+        <div class="row">
+            <div class="col-sm-5">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <hr>
+                <button type="submit" class="btn btn-primary">Export now</button>
+                {{ form_end(form) }}
+            </div>
+            <div class="col-sm-7">{{ block('export_list') }}</div>
+        </div>
+        <hr>
+
+    {% endblock %}
+    {% block export_list %}
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Export details</th>
+                <th>Status</th>
+                <th>File</th>
+            </tr>
+            {% for export in exports %}
+                <tr>
+                    <td>
+                        <strong>started:</strong> {{ export.createdAt|date('Y-m-d H:i') }}<br>
+                        <strong>finished:</strong> {{ export.exportedAt|date('Y-m-d H:i') }}
+                        <br>
+                        #{{ export.id }}
+                        {% if export.limit %}
+                            <span class="label label-warning"> limit: {{ export.limit }}</span>
+                        {% endif %}
+                        {% for year in export.fiscalYears %}
+                            <span class="label label-info"> {{ year }}</span>
+                        {% endfor %}
+                        {% for statute in export.statutes %}
+                            <span class="label label-info"> {{ statute }}</span>
+                        {% endfor %}
+                        {% if export.warningsOnly %}
+                            <span class="label label-warning">warnings only</span>
+                        {% endif %}
+                        <span class="label label-info">{{ export.reportTypeLabel(export.reportType) }}</span><br>
+                        {{ export.baseFilename }} <br>
+                        {{ export.totalLines|default(0) }} lines
+                    </td>
+                    <td>
+                        {% if export.status == 2 %}<i class="fa fa-circle-o-notch fa-spin"></i>{% endif %}
+                        {{ export.statusText }}
+                        {% if export.status >= 2 %}
+                            <a class="btn btn-xs btn-warning"
+                               href="{{ path('fda_export_restart',{id: export.id  }) }}">Restart</a>
+                        {% endif %}
+                        <a class="btn btn-xs btn-danger"
+                           href="{{ path('fda_export_restart',{id: export.id,delete:true  }) }}">Delete</a>
+                    </td>
+                    <td>{% if export.status == 3 %}
+                            {% if export.reportType == 3 %}
+                                {% if export.cartoTable %}
+                                    <a target="_blank" class="btn btn-success" href="{{ export.cartoTable.mapUrl }}"><i
+                                                class="fa fa-map-marker"></i> See on map</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ path('fda_export_file', {id: export.id}) }}"
+                                   class="btn btn-primary btn-sm"><i class="fa fa-download"></i>
+                                    Download
+                                </a>
+                            {% endif %}
+                        {% endif %}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">No exports found</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endblock %}
