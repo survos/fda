@@ -133,7 +133,11 @@ class WarningScraperCommand extends ContainerAwareCommand
                 if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
                     $output->writeln("<info>Fetching $url</info>");
                 }
-                $html = file_get_contents($url);
+                $html = @file_get_contents($url);
+                if (false === $html) {
+                    $output->writeln('Invalid URL -- skipping');
+                    continue;
+                }
                 $cachedFile->set($html);
                 $this->cache->save($cachedFile);
             } else {
