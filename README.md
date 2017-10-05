@@ -3,7 +3,7 @@ Master Retailer Database, Mobile App
 
     composer install
     bin/load-data
-    bin/console server:start
+    bin/console server:start 0.0.0.0:8000
     
 
 
@@ -121,3 +121,11 @@ To run Behat tests for one bundle:
 
 The test code lives in the Features package for every bundle
 (`src/Tobacco/FDABundle/Features/*.feature`).
+
+
+## Docker
+```
+cd laradock
+docker-compose up --build -d workspace
+docker-compose exec --user laradock workspace bash
+```

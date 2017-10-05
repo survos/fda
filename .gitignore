@@ -3,6 +3,7 @@
 /node_modules/
 /phpunit.xml
 /.php_cs
+/.idea
 /var/*
 !/var/cache
 /var/cache/*

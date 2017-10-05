@@ -120,7 +120,7 @@ module.exports = function (grunt) {
     grunt.registerTask('reload-inspections', ['shell:import-reset']);
     grunt.registerTask('reload-inspections-geocode', ['shell:import-reset-geocode']);
 
-    grunt.registerTask('default', ['gitpull:dev', 'bower:install', 'composer:fda:install', 'sf2-console:schema', 'compass:dev', 'update-revision']);
+    grunt.registerTask('default', ['bower:install', 'composer:fda:install', 'sf2-console:schema', 'compass:dev', 'update-revision']);
     grunt.registerTask('styles', ['compass:devpoll']);
     grunt.registerTask('staging', ['create-staging-config', 'update-revision', 'composer:fda:install', 'bower:install', 'sf2-console:schema']);
 

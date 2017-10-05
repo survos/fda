@@ -84,6 +84,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Add the composer.json
 COPY ./composer.json /home/laradock/.composer/composer.json
 
+# Add fingerprint for github.com
+COPY ./known_hosts /home/laradock/.ssh/known_hosts
+RUN chown -R laradock:laradock /home/laradock/.ssh
+
 # Make sure that ~/.composer belongs to laradock
 RUN chown -R laradock:laradock /home/laradock/.composer
 USER laradock
@@ -253,7 +257,7 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         nvm install ${NODE_VERSION} && \
         nvm use ${NODE_VERSION} && \
         nvm alias ${NODE_VERSION} && \
-        npm install -g gulp bower vue-cli \
+        npm install -g grunt-cli grunt-git bower \
 ;fi
 
 # Wouldn't execute when added to the RUN statement in the above block
@@ -276,6 +280,15 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
 # Add PATH for node
 ENV PATH $PATH:$NVM_DIR/versions/node/v${NODE_VERSION}/bin
 
+#####################################
+# Ruby:
+#####################################
+
+USER root
+
+RUN apt-get update && \
+    apt-get install -y ruby ruby-dev && \
+    gem install compass
 
 #####################################
 # YARN:
