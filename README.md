@@ -123,9 +123,38 @@ The test code lives in the Features package for every bundle
 (`src/Tobacco/FDABundle/Features/*.feature`).
 
 
-## Docker
+## Heroku deploy
+Install heroku:
 ```
-cd laradock
-docker-compose up --build -d workspace
-docker-compose exec --user laradock workspace bash
+nvm install v8.6.0
+nvm alias default v8.6.0
+nvm use default
+npm install -g heroku-cli
+```
+ 
+Heroku setup:
+```
+heroku login
+heroku plugins:install heroku-container-registry
+heroku container:login
+cd project
+heroku create
+```
+
+Build image locally: 
+```
+cp ./env-example .env
+docker-compose up --build -d web
+#check if no errors
+docker-compose logs
+then check the local app http://localhost:8080 
+```
+
+Once everything works, build and push image to heroku:
+```
+heroku container:push web --app fda
+heroku ps:scale web=1 #first time only
+heroku logs #check if no errors
+heroku open 
+heroku run bash
 ```
