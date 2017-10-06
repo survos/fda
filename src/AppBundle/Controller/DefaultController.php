@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\FiscalYear;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -36,10 +37,10 @@ class DefaultController extends Controller
 //        foreach ($inspectionCounts->getQuery()->getResult() as $inspectionYear) {
 //            $inspections[$inspectionYear['fiscalYear']] = $inspectionYear;
 //        }
-        dump($inspections);
         return $this->render(
             'home.html.twig',
             [
+                'years' => $this->get('doctrine.orm.entity_manager')->getRepository(FiscalYear::class)->findAll(),
                 'inspections' => $inspections
             ]
         );

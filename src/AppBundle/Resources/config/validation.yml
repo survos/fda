@@ -1,0 +1,13 @@
+AppBundle\Entity\FiscalYear:
+  properties:
+    lineCount:
+      - NotNull: ~
+
+AppBundle\Entity\RawInspection:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: [fiscalYear, lineNumber]
+        message: Must be unique within year and LineNumber
+  properties:
+    lineNumber:
+      - NotNull : ~

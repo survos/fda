@@ -80,7 +80,9 @@ class LoadFiscalYearsCommand extends ContainerAwareCommand
         $finder = new Finder();
         $finder->files()->in($dataDir);
 
+        $validator = $this->getContainer()->get('validator');
         foreach ($finder as $file) {
+            $stats = [];
             if (preg_match('/FY(\d{4})/', $file->getRealPath(), $m)) {
                 $year = $m[1];
             } else {
@@ -109,6 +111,7 @@ class LoadFiscalYearsCommand extends ContainerAwareCommand
                 ->setYear($year)
                 ->setLineCount(count($lines) - 1);
 
+
             $serializer = new Serializer([new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()], [new CsvEncoder()]);
 
             // $serializer = $this->getContainer()->get('serializer');
@@ -120,12 +123,20 @@ class LoadFiscalYearsCommand extends ContainerAwareCommand
             foreach ($data as $inspection) {
                 $md5 = md5(json_encode($inspection));
 
+                if (!isset($inspection['Link']))
+                {
+                    dump($inspection);
+                    continue;
+                }
                 if (preg_match('/(http.*)"/', $inspection['Link'], $m)) {
                     $inspection['Link'] = $m[1];
                 }
                 $lc++;
 
-                if ($inspection['DecisionType'] != 'No Violations Observed') {
+                $decisionType = $inspection['DecisionType'];
+                $stats[$decisionType] = empty($stats[$decisionType]) ? 1 : $stats[$decisionType] + 1;
+
+                if ($decisionType != 'No Violations Observed') {
                     if (!$entity = $em->getRepository(RawInspection::class)->findOneBy(['hash' => $md5])) {
                         $entity = new RawInspection();
                         $em->persist($entity);
@@ -133,6 +144,7 @@ class LoadFiscalYearsCommand extends ContainerAwareCommand
                             ->setHash($md5);
                 }
                     $entity
+                        ->setFiscalYear($fy)
                         ->setLineNumber($lc); // really need lc and filename.  MD5 could be that, too.
                     $entity->setRawCsv(json_encode($entity));
                     foreach ($inspection as $var => $val) {
@@ -140,13 +152,32 @@ class LoadFiscalYearsCommand extends ContainerAwareCommand
                         $entity->$method($val);
                     }
                     $violationCount++;
-                    if ($violationCount >= $this->input->getOption('limit')) {
+                    if (($limit = $this->input->getOption('limit')) && $violationCount >= $limit ) {
                         break;
                     }
+
+                    $errors = $this->getContainer()->get('validator')->validate($entity);
+                    if (count($errors)) {
+                        dump($errors); die('error!');
+                    }
+                    // dump($inspection, $entity);
+
+                    $errors = $validator->validate($entity);
+                    if (count($errors)) {
+                        dump($errors);
+                    }
                 }
-                // dump($inspection, $entity);
+
             }
-        }
-        $em->flush();
+            $fy->setStats($stats);
+
+            $errors = $validator->validate($fy);
+            if (count($errors)) {
+                dump($errors);
+            }
+
+
+            $em->flush();
+        } // foreach year
     }
 }

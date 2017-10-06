@@ -13,7 +13,6 @@
         </div>
         <div class="panel-body">
 
-
             {#<tr>#}
             {#<th>Fiscal year</th>#}
             {#<th>Lines</th>#}
@@ -22,6 +21,50 @@
             {#<th>Warning Letters</th>#}
             {#</tr>#}
             <div class="row">
+                <div class="col-sm-6 text-center padding-xs">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Count</th>
+                            <th>Warnings</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for year in years %}
+                            <tr>
+                                <td>{{ year.year }}</td>
+                                <td>{{ year.lineCount }}</td>
+                                <td>{{ year.warningCount }}</td>
+                                <td>
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Count</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for type, count in year.stats %}
+                                            <tr>
+                                                <td>
+                                                    {{ type }}
+                                                </td>
+                                                <td>
+                                                    {{ count|number_format }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
                 {% for i in inspections %}
                     {% set year_popover %}
                     <table class="small table table-condensed">
@@ -38,7 +81,8 @@
                         {% endfor %}
                     </table>
                     {% endset %}
-                    <div class="col-sm-2 text-center padding-xs">
+
+                    <div class="col-sm-4 text-center padding-xs">
                         <div class="well well-xs">
                         <h3>{{ i.year }} <small><a  data-container="body" data-title="Raw file data" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='{{ year_popover|raw }}'>
                                 <i class="fa fa-info"></i>
@@ -66,22 +110,29 @@
 
                     </div>
                 {% endfor %}
+
+
+                <div class="col-sm-6 text-center padding-xs">
+                        <div class="jumbotron">
+                            <div class="container">
+                                <h1>FDA Tobacco Inspections</h1>
+                                <p>
+                                    The FDA makes its inspection data available on their websites.
+                                <p><a class="btn btn-warning btn-lg" href="http://www.fda.gov/ICECI/EnforcementActions/WarningLetters/Tobacco/default.htm" target="_blank" role="button">FDA Warning Letters &raquo;</a></p>
+                                <p><a class="btn btn-primary btn-lg" href="http://www.accessdata.fda.gov/scripts/oce/inspections/oce_insp_searching.cfm" target="_blank" role="button">FDA Inspections &raquo;</a></p>
+                            </div>
+                        </div>
+                </div>
             </div>
         </div>
         <!-- /.panel-body -->
     </div>
     <div class="row">
+
+
+
+
         <div class="col-sm-12">
-            <h1>About this Project</h1>
-
-            <p>
-                The FDA Inspection Map is part of a larger monitoring project by the
-                American Legacy Foundation to investigate Tobacco Point of Sale (POSSE).
-                <a href="http://gis.americanlegacy.org/LegacyTobaccoViewer/" class="btn btn-primary" target="_blank">Open
-                    Legacy
-                    Tobacco Outlet Viewer</a>
-            </p>
-
             <h2>Quick Technical Summary</h2>
 
             <p>
@@ -92,15 +143,6 @@
 
             <h2>Detailed Summary/Method</h2>
 
-            <p>
-                The FDA makes its inspection data available here:
-            <ul>
-                <li><a target="_blank"
-                       href='http://www.fda.gov/ICECI/EnforcementActions/WarningLetters/Tobacco/default.htm'>http://www.fda.gov/ICECI/EnforcementActions/WarningLetters/Tobacco/default.htm</a>
-                <li><a target="_blank"
-                       href='http://www.accessdata.fda.gov/scripts/oce/inspections/oce_insp_searching.cfm'>http://www.accessdata.fda.gov/scripts/oce/inspections/oce_insp_searching.cfm</a>
-
-            </ul>
             <p>
                 The data was downloaded in CSV (Commma-Separated Values), cleaned (there
                 are some formatting issues in the data), and imported into a relational database.

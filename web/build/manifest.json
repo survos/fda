@@ -1,4 +1,8 @@
 {
   "build/app.js": "/build/app.js",
-  "build/global.css": "/build/global.css"
+  "build/global.css": "/build/global.css",
+  "build/images/layers-2x.png": "/build/images/layers-2x.4f0283c6.png",
+  "build/images/layers.png": "/build/images/layers.a6137456.png",
+  "build/images/marker-icon.png": "/build/images/marker-icon.2273e3d8.png",
+  "build/style.css": "/build/style.css"
 }

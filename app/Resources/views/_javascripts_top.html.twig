@@ -1,5 +1,24 @@
+<script src="{{ asset('build/manifest.js') }}"></script>
+<script src="{{ asset('build/vendor.js') }}"></script>
+<script src="{{ asset('build/app.js') }}"></script>
+{% if app.request.baseUrl is defined %}
+<script type="text/javascript">
+    Routing.setBaseUrl("{{ app.request.baseUrl }}")
+</script>
+{% endif %}
+
+{#
+<script src="{{ asset('bundles/easyadmin/javascript/jquery.min.js') }}"></script>
+
+
+
 <script type="text/javascript" src="{{ asset('components/modernizr/modernizr.js') }}"></script>
-<script src="{{ asset('/components/jquery/jquery.min.js') }}"></script>
+
+
+<script src="{{ asset('build/app.js') }}"></script>
+
+<script src="{{ asset('/bundles/app/js/main.js') }}"></script>
+
 <script src="{{ asset('/components/bootstrap/js/bootstrap.min.js') }}"></script>
 
 <script src="{{ asset('/components/jquery-ui/jquery-ui.min.js') }}"></script>
@@ -11,4 +30,4 @@
 <script type="text/javascript" src="{{ asset('components/select2/select2.js') }}"></script>
 <script type="text/javascript" src="{{ asset('components/raphael/raphael.js') }}"></script>
 <script type="text/javascript" src="{{ asset('components/morrisjs/morris.js') }}"></script>
-<script src="{{ asset('/bundles/app/js/main.js') }}"></script>
+#}
