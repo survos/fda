@@ -408,8 +408,8 @@ class InspectionImportCommand extends ContainerAwareCommand
                     ->setDecisionDate(empty($d['Decision Date']) ? null : new \DateTime($d['Decision Date']))
                     ->setDecisionType($d['Decision Type'])
                     ->setInspectionDate(null)
-                    ->setIsMinorInvolved($d['Minor Involved'])
-                    ->setSaleToMinor($d['Sale to Minor']);
+                    ->setIsMinorInvolved($d['Minor Involved'] === 'Yes')
+                    ->setSaleToMinor($d['Sale to Minor'] === 'Yes');
 
                 if ($geocoding) {
                     $raw->setGoogleDataJson(json_encode($googleGeo));

@@ -1,20 +1,77 @@
-version: '2.0'
+version: '3.3'
+
 services:
   web:
     build: .
+#    command: 'bash -c "composer install && bin/load-data"'
+#    command: 'sh -c "bin/load-data"'
+#    command: 'sh -c "bin/load-data"'
+    volumes:
+      - code_vol:/var/www
+    expose:
+      - "9000"
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP}"
+    depends_on:
+      - mysql
+    tty: true
+    networks:
+      - frontend
+      - backend
+
+### NGINX Server Container ##################################
+
+  nginx:
+    build:
+      context: ./docker/nginx
+      args:
+        - PHP_UPSTREAM_CONTAINER=${NGINX_PHP_UPSTREAM_CONTAINER}
+        - PHP_UPSTREAM_PORT=${NGINX_PHP_UPSTREAM_PORT}
     env_file: .env
     environment:
       - PORT=${PORT}
-    working_dir: /app/user
-    ports:
-      - '${PORT}:${PORT}'
-
-  shell:
-    build: .
-    working_dir: /app/user
-    environment:
-      PORT: 8080
-    ports:
-      - '8080:8080'
+#    command: 'sed -i "s/listen .*;/listen ${PORT};/g" /etc/nginx/sites-available/*'
     volumes:
-      - '.:/app/user'
+      - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
+      - code_vol:/var/www
+    ports:
+      - "${PORT}:80"
+      - "${NGINX_HOST_HTTPS_PORT}:443"
+    depends_on:
+      - web
+    networks:
+      - frontend
+      - backend
+
+### MySQL Container #########################################
+
+  mysql:
+    image: mysql/mysql-server:5.7
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+#      - TZ=${WORKSPACE_TIMEZONE}
+    volumes:
+      - ${DATA_SAVE_PATH}/mysql:/var/lib/mysql
+    ports:
+      - "${MYSQL_PORT}:3306"
+    networks:
+      - backend
+
+
+### Networks Setup ############################################
+
+networks:
+  frontend:
+    driver: "bridge"
+  backend:
+    driver: "bridge"
+
+### Volumes Setup #############################################
+
+volumes:
+  mysql:
+    driver: "local"
+  code_vol:

@@ -147,7 +147,7 @@ class RawInspection
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", length=240, nullable=true)
+     * @ORM\Column(name="`key`", type="string", length=240, nullable=true)
      */
     private $key;
 
@@ -189,7 +189,7 @@ class RawInspection
     /**
      * @var string
      *
-     * @ORM\Column(name="match", type="string", length=16, nullable=true)
+     * @ORM\Column(name="`match`", type="string", length=16, nullable=true)
      */
     private $match;
 
@@ -960,14 +960,14 @@ class RawInspection
      * @param boolean $isMinorInvolved
      * @return RawInspection
      */
-    public function setIsMinorInvolved($isMinorInvolved)
+    public function setIsMinorInvolved(bool $isMinorInvolved)
     {
         $this->isMinorInvolved = $isMinorInvolved;
 
         return $this;
     }
 
-    public function setMinorInvolved($v) {
+    public function setMinorInvolved(bool $v) {
         return $this->setIsMinorInvolved($v);
     }
 
@@ -987,7 +987,7 @@ class RawInspection
      * @param boolean $saleToMinor
      * @return RawInspection
      */
-    public function setSaleToMinor($saleToMinor)
+    public function setSaleToMinor(bool $saleToMinor)
     {
         $this->saleToMinor = $saleToMinor;
 
