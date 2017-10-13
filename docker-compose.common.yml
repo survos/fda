@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+  web:
+    build: .
+#    command: 'bash -c "composer install && bin/load-data"'
+#    command: 'sh -c "bin/load-data"'
+    volumes:
+      - code_vol:/var/www
+    ports:
+      - '${PORT}:${PORT}'
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP}"
+    depends_on:
+      - mysql
+    tty: true
+    networks:
+      - backend
+
+### MySQL Container #########################################
+
+  mysql:
+    image: leafney/docker-alpine-mysql
+    environment:
+      - MYSQL_USER_DB=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_USER_PWD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PWD=${MYSQL_ROOT_PASSWORD}
+#      - TZ=${WORKSPACE_TIMEZONE}
+    volumes:
+      - /var/lib/mysql
+      - /var/log/mysql
+    ports:
+      - "${MYSQL_PORT}:3306"
+    networks:
+      - backend
+
+
+### Networks Setup ############################################
+
+networks:
+  backend:
+    driver: "bridge"
+
+### Volumes Setup #############################################
+
+volumes:
+  mysql:
+    driver: "local"
+  code_vol:

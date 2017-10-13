@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+COMPOSE_FILE=docker-compose.common.yml:docker-compose.${1:-dev}.yml docker-compose config > docker-compose.yml

@@ -1,4 +1,4 @@
-FROM php:7.1.10-fpm-alpine
+FROM php:7.1-alpine
 
 RUN docker-php-ext-install pdo pdo_mysql
 
@@ -27,9 +27,10 @@ USER www-data
 
 
 #RUN composer install #chown /vendor is painfully long
-#RUN bin/load-data
+RUN bin/load-data
 
 # Export heroku bin
 #ENV PATH /app/user/bin:$PATH
 
-
+ENV PORT 8080
+CMD php bin/console server:run 0.0.0.0:$PORT
