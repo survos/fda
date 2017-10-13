@@ -123,6 +123,21 @@ The test code lives in the Features package for every bundle
 (`src/Tobacco/FDABundle/Features/*.feature`).
 
 
+## Docker
+
+Development:
+```
+bin/docker-env dev
+docker-compose up -d --build
+```
+
+Push production build:
+```
+bin/docker-env prod
+docker-compose up -d --build
+docker-compose push
+```
+
 ## Heroku deploy
 Install heroku:
 ```
