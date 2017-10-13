@@ -2,6 +2,10 @@ version: '3.3'
 
 services:
   web:
+    build:
+      context: .
+      args:
+        BUILD_ENV: dev
     volumes:
       - '.:/var/www'
     extra_hosts:
