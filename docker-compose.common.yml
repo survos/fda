@@ -3,10 +3,6 @@ version: '3.3'
 services:
   web:
     build: .
-#    command: 'bash -c "composer install && bin/load-data"'
-#    command: 'sh -c "bin/load-data"'
-    volumes:
-      - code_vol:/var/www
     ports:
       - '${PORT}:${PORT}'
     extra_hosts:
@@ -26,7 +22,6 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_USER_PWD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PWD=${MYSQL_ROOT_PASSWORD}
-#      - TZ=${WORKSPACE_TIMEZONE}
     volumes:
       - /var/lib/mysql
       - /var/log/mysql
@@ -41,10 +36,3 @@ services:
 networks:
   backend:
     driver: "bridge"
-
-### Volumes Setup #############################################
-
-volumes:
-  mysql:
-    driver: "local"
-  code_vol:

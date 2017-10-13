@@ -1,11 +1,13 @@
-#dev
-
-#`docker-compose -f docker-compose.staging.yml -f docker-compose.yml build`
-#https://github.com/Tecnativa/docker-odoo-base
-#https://github.com/Tecnativa/docker-odoo-base/tree/scaffolding-composefile3
-#docker-compose -f setup-devel.yaml run --rm odoo
-#docker-compose -f prod.yaml up --build --remove-orphans
 version: '3.3'
 
 services:
   web:
+    volumes:
+      - '.:/var/www'
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP}"
+
+### Volumes Setup #############################################
+volumes:
+  mysql:
+    driver: "local"

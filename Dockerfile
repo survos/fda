@@ -7,30 +7,17 @@ COPY docker/web/php.ini /usr/local/etc/php/php.ini
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
+ARG BUILD_ENV
+RUN echo "$BUILD_ENV"
+COPY docker/web/init_${BUILD_ENV}.sh /init.sh
+
+RUN if [ ! -d /var/www ]; then \
+    mkdir /var/www && \
+    chown www-data:www-data /var/www \
+;fi
+
+USER www-data
 WORKDIR /var/www
 
-# Copy the application files to the container
-ADD . /var/www
-
-# Can be removed once https://github.com/moby/moby/pull/34263 is released
-RUN chown -R www-data:www-data /var/www/var /home/www-data
-
-# Run composer as www-data
-# Can be moved before application files are added to the container once
-# the issue mentioned above is fixed and released
-USER www-data
-
-#RUN composer install  --no-interaction --optimize-autoloader --no-dev --prefer-dist && \
-#    rm -rf /home/www-data/.composer/cache
-
-#USER root
-
-
-#RUN composer install #chown /vendor is painfully long
-RUN bin/load-data
-
-# Export heroku bin
-#ENV PATH /app/user/bin:$PATH
-
 ENV PORT 8080
-CMD php bin/console server:run 0.0.0.0:$PORT
+ENTRYPOINT /init.sh

@@ -1,5 +1,15 @@
-#prod
 version: '3.3'
-
 services:
   web:
+    image: registry.optdeal.com/sda/web:latest
+    build:
+      context: .
+      args:
+        BUILD_ENV: prod
+    restart: unless-stopped
+    volumes:
+      - /var/www
+      - '.:/source'
+
+  mysql:
+    restart: unless-stopped
