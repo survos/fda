@@ -10,8 +10,11 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 ARG BUILD_ENV
 RUN echo "$BUILD_ENV"
 COPY docker/web/init_${BUILD_ENV}.sh /init.sh
+RUN chown -R www-data:www-data /home/www-data
 
-RUN if [ ! -d /var/www ]; then \
+RUN if [ -d /var/www ]; then \
+    chown -R www-data:www-data /var/www/var \
+;else \
     mkdir /var/www && \
     chown www-data:www-data /var/www \
 ;fi
