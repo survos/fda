@@ -141,14 +141,19 @@ docker-compose push
 
 Docker swarm (can be used for local development too):
 ```
-docker swarm init
+docker swarm init [--advertise-addr <ip>]
 Swarm initialized: current node (<node_id>) is now a manager.
 
 bin/docker-env prod
 docker stack deploy -c docker-compose.yml fda
 docker stack rm fda
-
 docker swarm leave --force
+```
+
+Troubleshooting:
+```
+docker stack services fda
+docker stack ps fda
 ```
 
 ## Heroku deploy
