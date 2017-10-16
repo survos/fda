@@ -129,13 +129,26 @@ Development:
 ```
 bin/docker-env dev
 docker-compose up -d --build
+docker-compose down
 ```
 
 Push production build:
 ```
 bin/docker-env prod
-docker-compose up -d --build
+docker-compose build
 docker-compose push
+```
+
+Docker swarm (can be used for local development too):
+```
+docker swarm init
+Swarm initialized: current node (<node_id>) is now a manager.
+
+bin/docker-env prod
+docker stack deploy -c docker-compose.yml fda
+docker stack rm fda
+
+docker swarm leave --force
 ```
 
 ## Heroku deploy
