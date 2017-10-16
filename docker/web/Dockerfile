@@ -1,5 +1,10 @@
 FROM php:7.1-alpine
 
+#change uid of www-data
+RUN echo http://dl-2.alpinelinux.org/alpine/edge/community/ >> /etc/apk/repositories
+ARG PUID
+RUN apk --no-cache add shadow && usermod -u ${PUID} www-data
+
 RUN docker-php-ext-install pdo pdo_mysql
 
 COPY ./php.ini /usr/local/etc/php/php.ini

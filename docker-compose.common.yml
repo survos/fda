@@ -2,7 +2,10 @@ version: '3.3'
 
 services:
   web:
-    build: ./docker/web
+    build:
+      context: ./docker/web
+      args:
+        PUID: ${WEB_PUID}
     ports:
       - '${PORT}:${PORT}'
     environment:
@@ -17,7 +20,8 @@ services:
       - backend
 
 ### MySQL Container #########################################
-
+# TODO: for dev and prod volumes should be bound to host
+# TODO: for test - should be inside container
   mysql:
     image: leafney/docker-alpine-mysql
     environment:

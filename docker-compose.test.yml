@@ -1,1 +1,9 @@
-#test
+version: '3.3'
+
+services:
+  web:
+    build:
+      args:
+        BUILD_ENV: test
+    volumes:
+      - '.:/var/www'
