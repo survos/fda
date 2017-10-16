@@ -5,6 +5,9 @@ services:
     build: .
     ports:
       - '${PORT}:${PORT}'
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
     extra_hosts:
       - "dockerhost:${DOCKER_HOST_IP}"
     depends_on:
