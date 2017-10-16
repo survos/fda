@@ -3,7 +3,7 @@ version: '3.3'
 services:
   web:
     build:
-      context: .
+      context: ./docker/web
       args:
         BUILD_ENV: dev
     volumes:

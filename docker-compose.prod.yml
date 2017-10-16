@@ -3,7 +3,7 @@ services:
   web:
     image: registry.optdeal.com/sda/web:latest
     build:
-      context: .
+      context: ./docker/web
       args:
         BUILD_ENV: prod
     restart: unless-stopped
