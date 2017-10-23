@@ -191,3 +191,46 @@ heroku logs #check if no errors
 heroku open 
 heroku run bash
 ```
+
+## docker-machine, example of Scaleway management
+Allows you to manage VPS using your local docker client.
+
+```
+https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine &&\nchmod +x /tmp/docker-machine &&\nsudo cp /tmp/docker-machine /usr/local/bin/docker-machine
+```
+Add into your bashrc:
+```
+export SCALEWAY_TOKEN=<token>
+export SCALEWAY_ORGANIZATION=<key>
+```
+
+Create new VPS:
+```
+https://github.com/scaleway/docker-machine-driver-scaleway
+curl -sL https://github.com/scaleway/docker-machine-driver-scaleway/releases/download/v1.3/docker-machine-driver-scaleway-linux-amd64 -O
+sudo chmod +x ./docker-machine-driver-scaleway-linux-amd64
+sudo mv ./docker-machine-driver-scaleway-linux-amd64 /usr/local/bin/docker-machine-driver-scaleway
+
+docker-machine create -d scaleway \
+  --scaleway-organization=$SCALEWAY_ORGANIZATION --scaleway-token=$SCALEWAY_TOKEN \
+  --scaleway-name="sdk1" --scaleway-debug \
+  --scaleway-commercial-type="VC1M" --scaleway-volumes="50G" \
+  sdk1
+```
+
+Commands: 
+```
+eval $(docker-machine env sdk1)
+eval $(docker-machine env sdk1 -u)
+docker-machine ls
+docker-machine ssh sdk1
+docker-machine ip sdk1
+docker-machine status sdk1
+docker-machine info sdk1
+docker-machine url sdk1
+docker-machine config sdk1
+docker-machine stop sdk1
+docker-machine config sdk1
+docker-machine start sdk1
+docker-machine rm sdk1
+```
