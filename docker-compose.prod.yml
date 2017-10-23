@@ -1,15 +1,28 @@
 version: '3.3'
 
 services:
+  code:
+    image: registry.optdeal.com/sda/code:latest
+    build:
+      context: .
+      dockerfile: ./docker/code/Dockerfile
+      args:
+        PUID: ${WEB_PUID}
+    volumes:
+      - code:/var/www
+
   web:
     image: registry.optdeal.com/sda/web:latest
     build:
       args:
         BUILD_ENV: prod
     restart: unless-stopped
+    depends_on:
+      - code
     volumes:
-      - /var/www
-      - '.:/source'
-
+      - code:/var/www
   mysql:
     restart: unless-stopped
+
+volumes:
+  code:

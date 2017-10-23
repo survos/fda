@@ -11,6 +11,7 @@ services:
     environment:
       DATABASE_HOST: mysql
       DATABASE_PORT: 3306
+      PORT: ${PORT}
     extra_hosts:
       - "dockerhost:${DOCKER_HOST_IP}"
     depends_on:

@@ -12,21 +12,27 @@ COPY ./php.ini /usr/local/etc/php/php.ini
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
-ARG BUILD_ENV
-RUN echo "$BUILD_ENV"
-COPY ./init_${BUILD_ENV}.sh /init.sh
+#ARG BUILD_ENV
+#RUN echo "$BUILD_ENV"
+#COPY ./init_${BUILD_ENV}.sh /init.sh
 COPY ./wait-for-mysql.sh /wait-for-mysql.sh
-RUN chown -R www-data:www-data /home/www-data
+COPY ./build.sh /build.sh
 
+RUN chown -R www-data:www-data /home/www-data
 RUN if [ -d /var/www ]; then \
-    chown -R www-data:www-data /var/www/var \
-;else \
-    mkdir /var/www && \
-    chown www-data:www-data /var/www \
-;fi
+        chown -R www-data:www-data /var/www/var \
+    ;else \
+        mkdir /var/www && \
+        mkdir /var/www/web && \
+        chown www-data:www-data /var/www \
+    ;fi
+
+RUN ls -alh /var/www
+RUN /build.sh
 
 USER www-data
 WORKDIR /var/www
-
-ENV PORT 8080
-ENTRYPOINT /init.sh
+VOLUME /var/www
+#ENV PORT 8080
+ENTRYPOINT php -S 0.0.0.0:${PORT} /var/www/web/app_dev.php
+#tail -f /dev/null
