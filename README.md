@@ -132,20 +132,38 @@ docker-compose up -d --build
 docker-compose down
 ```
 
-Push production build:
+Build image:
 ```
+#local docker
 bin/docker-env prod
 docker-compose build
 docker-compose push
 ```
 
+Deploy using docker-compose:
+```
+#remote docker
+eval $(docker-machine env sdk1)
+docker-compose pull 
+docker-compose up -d --force-recreate
+docker-compose logs web
+docker-machine ip sdk1
+
+docker-compose down 
+```
+
 Docker swarm (can be used for local development too):
 ```
+#remote docker
+eval $(docker-machine env sdk1)
+
 docker swarm init [--advertise-addr <ip>]
 Swarm initialized: current node (<node_id>) is now a manager.
 
 bin/docker-env prod
 docker stack deploy -c docker-compose.yml fda
+docker service ls
+
 docker stack rm fda
 docker swarm leave --force
 ```

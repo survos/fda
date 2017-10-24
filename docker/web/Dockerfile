@@ -41,5 +41,6 @@ USER www-data
 WORKDIR /var/www
 RUN /build.sh
 #ENV PORT 8080
+EXPOSE 8080
 ENTRYPOINT /run.sh
 #tail -f /dev/null
