@@ -7,6 +7,12 @@ services:
       args:
         BUILD_ENV: prod
     restart: unless-stopped
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 
   mysql:
     restart: unless-stopped
+    deploy:
+      placement:
+        constraints: [node.role == manager]

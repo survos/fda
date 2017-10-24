@@ -8,7 +8,9 @@ services:
       args:
         PUID: ${WEB_PUID}
     ports:
-      - '${PORT}:8080'
+      - mode: host
+        target: 8080
+        published: 8080
     environment:
       DATABASE_HOST: mysql
       DATABASE_PORT: 3306

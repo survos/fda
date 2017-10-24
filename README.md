@@ -145,6 +145,7 @@ Deploy using docker-compose:
 #remote docker
 eval $(docker-machine env sdk1)
 docker-compose pull 
+#docker-compose rm --all
 docker-compose up -d --force-recreate
 docker-compose logs web
 docker-machine ip sdk1
